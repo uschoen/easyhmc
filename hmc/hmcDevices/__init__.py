@@ -1,0 +1,1 @@
+__all__ = [ "ds1820","hmcDevices","fs20","ks300_temperatur","ks300_humidity","ks300_wind","ks300_windchill","ks300_rain"]

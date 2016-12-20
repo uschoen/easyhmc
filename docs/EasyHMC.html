@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>EasyHMC.py</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>EasyHMC.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on 16.11.2016</span>
+<span class="sd">#DIVIDER</span>
+<span class="sd">@author: uschoen</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;1.6&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span> 
+<span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">getopt</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">getpass</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">multilogger</span> <span class="kn">import</span> <span class="n">dispatcher</span>
+<span class="kn">from</span> <span class="nn">hmc</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">gateways</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+
+
+
+<span class="k">def</span> <span class="nf">usage</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    command line menu for -help --h</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">print</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;--config=configfile [--daemon] &quot;</span>
+    <span class="k">print</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;--help (-h) this menu&quot;</span>
+    <span class="k">print</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;--version (-v) show version of HMC&quot;</span>
+    <span class="k">print</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;--daemon (-d) run as daemon&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">my_exception</span><span class="p">(</span><span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">exc_traceback</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <pre><code>handle all exceptions
+</code></pre>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">global</span> <span class="n">logger</span><span class="p">,</span><span class="n">log</span>
+    <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">exc_type</span><span class="p">,</span> <span class="ne">KeyboardInterrupt</span><span class="p">):</span>
+        <span class="n">filename</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">dummy</span><span class="p">,</span> <span class="n">dummy</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">extract_tb</span><span class="p">(</span> <span class="n">exc_traceback</span> <span class="p">)</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span> <span class="n">filename</span> <span class="p">)</span>
+        <span class="n">error</span>    <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span> <span class="n">exc_type</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="n">exc_value</span> <span class="p">)</span>
+        <span class="k">if</span> <span class="n">logger</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&quot;Error&quot;</span><span class="p">,</span><span class="s">&quot;a critical error has occured:</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">error</span><span class="p">))</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&quot;Error&quot;</span><span class="p">,</span><span class="s">&quot;It occurred at line </span><span class="si">%d</span><span class="s"> of file </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&quot;error&quot;</span><span class="p">,</span><span class="s">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exception</span><span class="p">(</span><span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">exc_traceback</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&quot;a critical error has occured:</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">error</span><span class="p">))</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&quot;It occurred at line </span><span class="si">%d</span><span class="s"> of file </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span>
+            <span class="k">print</span> <span class="s">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exception</span><span class="p">(</span><span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">exc_traceback</span><span class="p">))</span>
+    <span class="nb">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">loadThread</span><span class="p">(</span><span class="n">threadList</span><span class="p">):</span>
+    <span class="n">threadInstance</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">threadName</span> <span class="ow">in</span> <span class="n">threadList</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">threadList</span><span class="p">[</span><span class="n">threadName</span><span class="p">][</span><span class="s">&#39;enable&#39;</span><span class="p">]:</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&quot;info&quot;</span><span class="p">,</span><span class="s">&quot;gateway:&quot;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">threadName</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; is disable&quot;</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">pakage</span><span class="o">=</span><span class="s">&quot;gateways.&quot;</span><span class="o">+</span><span class="n">threadList</span><span class="p">[</span><span class="n">threadName</span><span class="p">][</span><span class="s">&#39;pakage&#39;</span><span class="p">]</span><span class="o">+</span><span class="s">&quot;.&quot;</span><span class="o">+</span><span class="n">threadList</span><span class="p">[</span><span class="n">threadName</span><span class="p">][</span><span class="s">&#39;modul&#39;</span><span class="p">]</span>
+        <span class="n">log</span><span class="p">(</span><span class="s">&quot;info&quot;</span><span class="p">,</span><span class="s">&quot;try to load gateway:&quot;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">threadName</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; with pakage: &quot;</span><span class="o">+</span><span class="n">pakage</span><span class="p">)</span>
+        <span class="n">ARGUMENTS</span> <span class="o">=</span> <span class="p">(</span><span class="n">threadList</span><span class="p">[</span><span class="n">threadName</span><span class="p">][</span><span class="s">&#39;config&#39;</span><span class="p">],</span><span class="n">coreInstance</span><span class="p">,</span><span class="n">logger</span><span class="p">)</span>  
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">pakage</span><span class="p">)</span>
+            <span class="n">CLASS_NAME</span> <span class="o">=</span> <span class="n">threadList</span><span class="p">[</span><span class="n">threadName</span><span class="p">][</span><span class="s">&#39;class&#39;</span><span class="p">]</span>
+            <span class="n">threadInstance</span><span class="p">[</span><span class="n">threadName</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">CLASS_NAME</span><span class="p">)(</span><span class="o">*</span><span class="n">ARGUMENTS</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s">&#39;__version__&#39;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">module</span><span class="o">.</span><span class="n">__version__</span><span class="o">&lt;</span><span class="n">__version__</span><span class="p">:</span>
+                    <span class="n">log</span><span class="p">(</span><span class="s">&quot;warning&quot;</span><span class="p">,</span> <span class="s">&quot;Version of </span><span class="si">%s</span><span class="s"> is </span><span class="si">%s</span><span class="s"> and can by to low&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">pakage</span><span class="p">,</span><span class="n">module</span><span class="o">.</span><span class="n">__version__</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">log</span><span class="p">(</span><span class="s">&quot;info&quot;</span><span class="p">,</span> <span class="s">&quot;Version of </span><span class="si">%s</span><span class="s"> is </span><span class="si">%s</span><span class="s">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">pakage</span><span class="p">,</span><span class="n">module</span><span class="o">.</span><span class="n">__version__</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">log</span><span class="p">(</span><span class="s">&quot;warning&quot;</span><span class="p">,</span> <span class="s">&quot;pakage </span><span class="si">%s</span><span class="s"> has no version Info&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">pakage</span><span class="p">))</span>
+            
+            <span class="n">threadInstance</span><span class="p">[</span><span class="n">threadName</span><span class="p">]</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">except</span> <span class="p">:</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&quot;error&quot;</span><span class="p">,</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span>
+            <span class="n">tb</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">tb</span><span class="p">:</span>
+                <span class="n">log</span><span class="p">(</span><span class="s">&quot;error&quot;</span><span class="p">,</span><span class="s">&quot;Traceback Info:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">msg</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">threadInstance</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">getOptions</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    check command line argument</span>
+<span class="sd">    --h -help helpmenu</span>
+<span class="sd">    --v -version show version</span>
+<span class="sd">    --d -daemon run as daemon, default false</span>
+<span class="sd">    --c -config config file, default etc/config.json</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">shortOptions</span> <span class="o">=</span> <span class="s">&#39;hdvc:&#39;</span>
+    <span class="n">longOptions</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;help&#39;</span><span class="p">,</span> <span class="s">&#39;version&#39;</span><span class="p">,</span><span class="s">&#39;config=&#39;</span><span class="p">,</span> <span class="s">&#39;daemon&#39;</span><span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">getopt</span><span class="o">.</span><span class="n">getopt</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">shortOptions</span><span class="p">,</span> <span class="n">longOptions</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">opts</span>
+    <span class="k">except</span> <span class="n">getopt</span><span class="o">.</span><span class="n">GetoptError</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;please use:&quot;</span>
+        <span class="n">usage</span><span class="p">()</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">loadConfigurationFile</span><span class="p">(</span><span class="nb">file</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    loading configuration file</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="nb">file</span><span class="p">))</span> <span class="k">as</span> <span class="n">jsonDataFile</span><span class="p">:</span>
+            <span class="n">dateFile</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">jsonDataFile</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dateFile</span> 
+    <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+        <span class="k">print</span> <span class="p">(</span><span class="s">&#39;cant not find file: &#39;</span><span class="o">+</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="nb">file</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">print</span> <span class="p">(</span><span class="s">&#39;error in config file: &#39;</span><span class="o">+</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="nb">file</span><span class="p">))</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&quot;error: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">e</span> <span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+    <span class="k">except</span> <span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&quot;UNKOWN ERROR in script: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">log</span> <span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s">&quot;unkown&quot;</span><span class="p">,</span><span class="n">messages</span><span class="o">=</span><span class="s">&quot;no messages&quot;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    logger converter</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">global</span> <span class="n">logger</span>
+    <span class="k">if</span> <span class="n">logger</span><span class="p">:</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">meassage</span><span class="o">=</span><span class="p">{}</span>
+        <span class="n">meassage</span><span class="p">[</span><span class="s">&#39;package&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">__name__</span>
+        <span class="n">meassage</span><span class="p">[</span><span class="s">&#39;level&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">level</span>
+        <span class="n">meassage</span><span class="p">[</span><span class="s">&#39;messages&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">messages</span>
+        <span class="n">meassage</span><span class="p">[</span><span class="s">&#39;time&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%d</span><span class="s">.%b %H:%M:%S&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">localtime</span><span class="p">())</span>
+        <span class="n">meassage</span><span class="p">[</span><span class="s">&#39;microsecond&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">dt</span><span class="o">.</span><span class="n">microsecond</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">meassage</span><span class="p">)</span>
+        
+<span class="sd">&#39;&#39;&#39; </span>
+<span class="sd">Gloable Variablen</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="n">configuration</span><span class="o">=</span><span class="p">{</span>
+               <span class="s">&#39;configfile&#39;</span><span class="p">:</span><span class="s">&#39;etc/config.json&#39;</span><span class="p">,</span>
+               <span class="s">&#39;daemon&#39;</span><span class="p">:</span><span class="bp">False</span>              
+              <span class="p">}</span>        
+<span class="n">logger</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">CoreInstance</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">allThreads</span><span class="o">=</span><span class="p">{}</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">global handle</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">excepthook</span> <span class="o">=</span> <span class="n">my_exception</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">start up</span>
+<span class="sd">load ommand line option</span>
+<span class="sd">&#39;&#39;&#39;</span>        
+<span class="k">for</span> <span class="n">o</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">getOptions</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">o</span> <span class="o">==</span> <span class="s">&quot;--help&quot;</span> <span class="ow">or</span> <span class="n">o</span> <span class="o">==</span> <span class="s">&quot;-h&quot;</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;HELP:&quot;</span>
+        <span class="n">usage</span><span class="p">()</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">o</span> <span class="o">==</span> <span class="s">&quot;--config&quot;</span> <span class="ow">or</span> <span class="n">o</span> <span class="o">==</span> <span class="s">&quot;-c&quot;</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;use config file:&quot;</span><span class="p">,</span> <span class="n">a</span>
+        <span class="n">configuration</span><span class="p">[</span><span class="s">&#39;configfile&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">a</span>
+    <span class="k">elif</span> <span class="n">o</span> <span class="o">==</span> <span class="s">&quot;--daemon&quot;</span> <span class="ow">or</span> <span class="n">o</span><span class="o">==</span> <span class="s">&quot;-d&quot;</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;run as daemon:&quot;</span><span class="p">,</span> <span class="n">a</span>
+        <span class="n">configuration</span><span class="p">[</span><span class="s">&#39;daemon&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+    <span class="k">elif</span> <span class="n">o</span> <span class="o">==</span> <span class="s">&quot;--version&quot;</span> <span class="ow">or</span> <span class="n">o</span><span class="o">==</span><span class="s">&quot;-v&quot;</span><span class="p">:</span>
+        <span class="k">print</span> <span class="p">(</span><span class="n">__version__</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">load configuration</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="n">configuration</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">loadConfigurationFile</span><span class="p">(</span><span class="n">configuration</span><span class="p">[</span><span class="s">&#39;configfile&#39;</span><span class="p">]))</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">add multilogger </span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="k">if</span> <span class="s">&#39;multilogger&#39;</span> <span class="ow">in</span> <span class="n">configuration</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">configuration</span><span class="p">[</span><span class="s">&#39;multilogger&#39;</span><span class="p">][</span><span class="s">&#39;enable&#39;</span><span class="p">]:</span>
+        <span class="n">logger</span><span class="o">=</span><span class="n">dispatcher</span><span class="o">.</span><span class="n">core</span><span class="p">(</span><span class="n">configuration</span><span class="p">[</span><span class="s">&#39;multilogger&#39;</span><span class="p">])</span>
+<span class="n">log</span><span class="p">(</span><span class="s">&quot;info&quot;</span><span class="p">,</span> <span class="s">&quot;startup and run under user:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">getpass</span><span class="o">.</span><span class="n">getuser</span><span class="p">()))</span> 
+<span class="n">log</span><span class="p">(</span><span class="s">&quot;info&quot;</span><span class="p">,</span> <span class="s">&quot;EasyHMC Version: </span><span class="si">%s</span><span class="s">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">__version__</span><span class="p">))</span> 
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">build cor </span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="n">coreInstance</span><span class="o">=</span><span class="n">core</span><span class="o">.</span><span class="n">manager</span><span class="p">(</span><span class="n">configuration</span><span class="p">[</span><span class="s">&#39;core&#39;</span><span class="p">],</span><span class="n">logger</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39; </span>
+<span class="sd">start up Gateways</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="n">allThreads</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">loadThread</span><span class="p">(</span><span class="n">configuration</span><span class="p">[</span><span class="s">&#39;gateways&#39;</span><span class="p">]))</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">start ....</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+
+
+
+
+<span class="sd">&#39;&#39;&#39; </span>
+<span class="sd">start threads</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="n">log</span><span class="p">(</span><span class="s">&quot;info&quot;</span><span class="p">,</span> <span class="s">&quot;find </span><span class="si">%d</span><span class="s"> threads to start&quot;</span><span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">allThreads</span><span class="p">)))</span>
+<span class="k">for</span> <span class="n">threadsToStart</span> <span class="ow">in</span> <span class="n">allThreads</span><span class="p">:</span>
+    <span class="n">log</span><span class="p">(</span><span class="s">&quot;info&quot;</span><span class="p">,</span> <span class="s">&quot;starting thread: &quot;</span><span class="o">+</span><span class="n">threadsToStart</span><span class="p">)</span> 
+    <span class="n">allThreads</span><span class="p">[</span><span class="n">threadsToStart</span><span class="p">]</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    
+<span class="n">log</span><span class="p">(</span><span class="s">&quot;info&quot;</span><span class="p">,</span> <span class="s">&quot;HMC monitoring threads&quot;</span><span class="p">)</span>  
+<span class="sd">&#39;&#39;&#39; </span>
+<span class="sd">check threads</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">deviceID</span> <span class="ow">in</span> <span class="n">coreInstance</span><span class="o">.</span><span class="n">getAllDeviceId</span><span class="p">():</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&quot;data&quot;</span><span class="p">,</span><span class="s">&quot;find object in CORE:</span><span class="si">%s</span><span class="s">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">deviceID</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">coreInstance</span><span class="o">.</span><span class="n">getAllDeviceAttribute</span><span class="p">(</span><span class="n">deviceID</span><span class="p">):</span>
+                
+                <span class="n">log</span><span class="p">(</span><span class="s">&quot;data&quot;</span><span class="p">,</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> : </span><span class="si">%s</span><span class="s">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span><span class="n">coreInstance</span><span class="o">.</span><span class="n">getDeviceAttributeValue</span><span class="p">(</span><span class="n">deviceID</span><span class="p">,</span><span class="n">attribute</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">threadsTocheck</span> <span class="ow">in</span> <span class="n">allThreads</span><span class="p">:</span>        
+            <span class="k">if</span> <span class="n">allThreads</span><span class="p">[</span><span class="n">threadsTocheck</span><span class="p">]</span><span class="o">.</span><span class="n">isAlive</span><span class="p">():</span>
+                <span class="n">log</span><span class="p">(</span><span class="s">&quot;info&quot;</span><span class="p">,</span> <span class="s">&quot;thread: &quot;</span><span class="o">+</span><span class="n">threadsTocheck</span><span class="o">+</span><span class="s">&quot; is alive&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">log</span><span class="p">(</span><span class="s">&quot;error&quot;</span><span class="p">,</span> <span class="s">&quot;thread: &quot;</span><span class="o">+</span><span class="n">threadsTocheck</span><span class="o">+</span><span class="s">&quot; not running&quot;</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span> 
+    <span class="n">log</span><span class="p">(</span><span class="s">&quot;emergency&quot;</span><span class="p">,</span> <span class="s">&quot;HMC not running and stop&quot;</span><span class="p">)</span>  
+<span class="k">except</span> <span class="p">:</span>
+    <span class="n">log</span><span class="p">(</span><span class="s">&quot;error&quot;</span><span class="p">,</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span>
+    <span class="n">tb</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">tb</span><span class="p">:</span>
+        <span class="n">log</span><span class="p">(</span><span class="s">&quot;error&quot;</span><span class="p">,</span><span class="s">&quot;Traceback Info:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">msg</span><span class="p">))</span> 
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">log</span><span class="p">(</span><span class="s">&quot;emergency&quot;</span><span class="p">,</span><span class="s">&quot;system goaing down !!&quot;</span><span class="p">)</span>
+    <span class="n">coreInstance</span><span class="o">.</span><span class="n">writeBackup</span><span class="p">()</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

@@ -1,0 +1,41 @@
+{
+       "attribute": {
+       			"lastrain": 
+                    {
+                           "value":"0",
+                           "typ":"var",
+                           "hidden":true
+                    },
+        		"firststart":
+                    {
+                 			"value":true,
+                 			"typ":"bool",
+                 			"hidden":true
+                 	},
+                 "lastrain24":
+                    {
+                    		"value":{},
+                    		"typ":"array",
+                    		"hidden":true
+                    },
+                 "lastrain1h":
+                    {
+                    		"value":{},
+                    		"typ":"array",
+                    		"hidden":true
+                    },
+                 "rain1h":
+                    {
+                    		"value":0,
+                    		"typ":"var"
+                    },
+                 "rain24h":
+                    {
+                    		"value":0,
+                    		"typ":"var"
+                    }
+                  
+                 
+             
+}}
+

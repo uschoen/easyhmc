@@ -1,0 +1,338 @@
+
+{
+"1B1B05@cul.rasp-test": 
+{
+"lastupdate": 
+{
+"typ": "timestamp", "value": 1481792975}, "enable": 
+{
+"typ": "bool", "value": true}, "create": 
+{
+"typ": "int", "value": 1481916400}, "value": 
+{
+"typ": "var", "value": "00"}, "callback": 
+{
+"typ": "hidden", "value": false}, "lastchange": 
+{
+"typ": "int", "value": 1481792975}, "deviceID": 
+{
+"value": "1B1B05@cul.rasp-test"}, "rssi": 
+{
+"typ": "var", "value": -73}, "typ": 
+{
+"value": "fs20"}},
+ "ks300_windchill@cul.rasp-test": 
+{
+"lastupdate": 
+{
+"typ": "timestamp", "value": 1481916172}, "enable": 
+{
+"typ": "bool", "value": true}, "create": 
+{
+"typ": "int", "value": 1481916400}, "value": 
+{
+"typ": "var", "value": 0}, "callback": 
+{
+"typ": "hidden", "value": false}, "lastchange": 
+{
+"typ": "int", "value": 1481915554}, "deviceID": 
+{
+"value": "ks300_windchill@cul.rasp-test"}, "rssi": 
+{
+"typ": "var", "value": -86}, "typ": 
+{
+"value": "ks300_windchill"}},
+ "111101@cul.rasp-test": 
+{
+"lastupdate": 
+{
+"typ": "timestamp", "value": 1481915260}, "enable": 
+{
+"typ": "bool", "value": true}, "create": 
+{
+"typ": "int", "value": 1481916400}, "value": 
+{
+"typ": "var", "value": "12"}, "callback": 
+{
+"typ": "hidden", "value": false}, "lastchange": 
+{
+"typ": "int", "value": 1481915260}, "deviceID": 
+{
+"value": "111101@cul.rasp-test"}, "rssi": 
+{
+"typ": "var", "value": -74}, "typ": 
+{
+"value": "fs20"}},
+ "ks300_wind@cul.rasp-test": 
+{
+"lastupdate": 
+{
+"typ": "timestamp", "value": 1481916172}, "enable": 
+{
+"typ": "bool", "value": true}, "create": 
+{
+"typ": "int", "value": 1481916400}, "value": 
+{
+"typ": "var", "value": 0}, "callback": 
+{
+"typ": "hidden", "value": false}, "lastchange": 
+{
+"typ": "int", "value": 1481915554}, "deviceID": 
+{
+"value": "ks300_wind@cul.rasp-test"}, "rssi": 
+{
+"typ": "var", "value": -86}, "typ": 
+{
+"value": "ks300_wind"}},
+ "111100@cul.rasp-test": 
+{
+"lastupdate": 
+{
+"typ": "timestamp", "value": 1481915260}, "enable": 
+{
+"typ": "bool", "value": true}, "create": 
+{
+"typ": "int", "value": 1481916400}, "value": 
+{
+"typ": "var", "value": "12"}, "callback": 
+{
+"typ": "hidden", "value": false}, "lastchange": 
+{
+"typ": "int", "value": 1481915260}, "deviceID": 
+{
+"value": "111100@cul.rasp-test"}, "rssi": 
+{
+"typ": "var", "value": -74}, "typ": 
+{
+"value": "fs20"}},
+ "ks300_temperatur@cul.rasp-test": 
+{
+"lastupdate": 
+{
+"typ": "timestamp", "value": 1481916172}, "enable": 
+{
+"typ": "bool", "value": true}, "create": 
+{
+"typ": "int", "value": 1481916400}, "value": 
+{
+"typ": "var", "value": -1.9}, "callback": 
+{
+"typ": "hidden", "value": false}, "lastchange": 
+{
+"typ": "int", "value": 1481915970}, "deviceID": 
+{
+"value": "ks300_temperatur@cul.rasp-test"}, "rssi": 
+{
+"typ": "var", "value": -86}, "typ": 
+{
+"value": "ks300_temperatur"}},
+ "929305@cul.rasp-test": 
+{
+"lastupdate": 
+{
+"typ": "timestamp", "value": 1481794038}, "enable": 
+{
+"typ": "bool", "value": true}, "create": 
+{
+"typ": "int", "value": 1481916400}, "value": 
+{
+"typ": "var", "value": "12"}, "callback": 
+{
+"typ": "hidden", "value": false}, "lastchange": 
+{
+"typ": "int", "value": 1481794038}, "deviceID": 
+{
+"value": "929305@cul.rasp-test"}, "rssi": 
+{
+"typ": "var", "value": -74}, "typ": 
+{
+"value": "fs20"}},
+ "1A1A02@cul.rasp-test": 
+{
+"lastupdate": 
+{
+"typ": "timestamp", "value": 1481797663}, "enable": 
+{
+"typ": "bool", "value": true}, "create": 
+{
+"typ": "int", "value": 1481916400}, "value": 
+{
+"typ": "var", "value": "00"}, "callback": 
+{
+"typ": "hidden", "value": false}, "lastchange": 
+{
+"typ": "int", "value": 1481797663}, "deviceID": 
+{
+"value": "1A1A02@cul.rasp-test"}, "rssi": 
+{
+"typ": "var", "value": -74}, "typ": 
+{
+"value": "fs20"}},
+ "ks300_humidity@cul.rasp-test": 
+{
+"lastupdate": 
+{
+"typ": "timestamp", "value": 1481916172}, "enable": 
+{
+"typ": "bool", "value": true}, "create": 
+{
+"typ": "int", "value": 1481916400}, "value": 
+{
+"typ": "var", "value": 96}, "callback": 
+{
+"typ": "hidden", "value": false}, "lastchange": 
+{
+"typ": "int", "value": 1481915554}, "deviceID": 
+{
+"value": "ks300_humidity@cul.rasp-test"}, "rssi": 
+{
+"typ": "var", "value": -86}, "typ": 
+{
+"value": "ks300_humidity"}},
+ "1B1B01@cul.rasp-test": 
+{
+"lastupdate": 
+{
+"typ": "timestamp", "value": 1481797698}, "enable": 
+{
+"typ": "bool", "value": true}, "create": 
+{
+"typ": "int", "value": 1481916400}, "value": 
+{
+"typ": "var", "value": "00"}, "callback": 
+{
+"typ": "hidden", "value": false}, "lastchange": 
+{
+"typ": "int", "value": 1481797698}, "deviceID": 
+{
+"value": "1B1B01@cul.rasp-test"}, "rssi": 
+{
+"typ": "var", "value": -74}, "typ": 
+{
+"value": "fs20"}},
+ "1B1B04@cul.rasp-test": 
+{
+"lastupdate": 
+{
+"typ": "timestamp", "value": 1481797626}, "enable": 
+{
+"typ": "bool", "value": true}, "create": 
+{
+"typ": "int", "value": 1481916400}, "value": 
+{
+"typ": "var", "value": "00"}, "callback": 
+{
+"typ": "hidden", "value": false}, "lastchange": 
+{
+"typ": "int", "value": 1481797626}, "deviceID": 
+{
+"value": "1B1B04@cul.rasp-test"}, "rssi": 
+{
+"typ": "var", "value": -74}, "typ": 
+{
+"value": "fs20"}},
+"11110E@cul.rasp-test": 
+{
+"lastupdate": 
+{
+"typ": "timestamp", "value": 1481915260}, "enable": 
+{
+"typ": "bool", "value": true}, "create": 
+{
+"typ": "int", "value": 1481916400}, "value": 
+{
+"typ": "var", "value": "12"}, "callback": 
+{
+"typ": "hidden", "value": false}, "lastchange": 
+{
+"typ": "int", "value": 1481915260}, "deviceID": 
+{
+"value": "11110E@cul.rasp-test"}, "rssi": 
+{
+"typ": "var", "value": -67}, "typ": 
+{
+"value": "fs20"}},
+ "1B1B00@cul.rasp-test": 
+{
+"lastupdate": 
+{
+"typ": "timestamp", "value": 1481915260}, "enable": 
+{
+"typ": "bool", "value": true}, "create": 
+{
+"typ": "int", "value": 1481916400}, "value": 
+{
+"typ": "var", "value": "11"}, "callback": 
+{
+"typ": "hidden", "value": false}, "lastchange": 
+{
+"typ": "int", "value": 1481915260}, "deviceID": 
+{
+"value": "1B1B00@cul.rasp-test"}, "rssi": 
+{
+"typ": "var", "value": -74}, "typ": 
+{
+"value": "fs20"}},
+ "1B1B06@cul.rasp-test": 
+{
+"lastupdate": 
+{
+"typ": "timestamp", "value": 1481792977}, "enable": 
+{
+"typ": "bool", "value": true}, "create": 
+{
+"typ": "int", "value": 1481916400}, "value": 
+{
+"typ": "var", "value": "00"}, "callback": 
+{
+"typ": "hidden", "value": false}, "lastchange": 
+{
+"typ": "int", "value": 1481792977}, "deviceID": 
+{
+"value": "1B1B06@cul.rasp-test"}, "rssi": 
+{
+"typ": "var", "value": -73}, "typ": 
+{
+"value": "fs20"}},
+ "1A1A03@cul.rasp-test": 
+{
+"lastupdate": 
+{
+"typ": "timestamp", "value": 1481797658}, "enable": 
+{
+"typ": "bool", "value": true}, "create": 
+{
+"typ": "int", "value": 1481916400}, "value": 
+{
+"typ": "var", "value": "00"}, "callback": 
+{
+"typ": "hidden", "value": false}, "lastchange": 
+{
+"typ": "int", "value": 1481797658}, "deviceID": 
+{
+"value": "1A1A03@cul.rasp-test"}, "rssi": 
+{
+"typ": "var", "value": -74}, "typ": 
+{
+"value": "fs20"}},
+ "1B1B02@cul.rasp-test": 
+{
+"lastupdate": 
+{
+"typ": "timestamp", "value": 1481797667}, "enable": 
+{
+"typ": "bool", "value": true}, "create": 
+{
+"typ": "int", "value": 1481916400}, "value": 
+{
+"typ": "var", "value": "00"}, "callback": 
+{
+"typ": "hidden", "value": false}, "lastchange": 
+{
+"typ": "int", "value": 1481797667}, "deviceID": 
+{
+"value": "1B1B02@cul.rasp-test"}, "rssi": 
+{
+"typ": "var", "value": -74}, "typ": 
+{
+"value": "fs20"}}}

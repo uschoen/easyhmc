@@ -1,0 +1,26 @@
+{
+       "attribute": {
+       			"rssi": 
+                    {
+                           "value":"0",
+                           "typ":"var"
+                    },
+                 "tempMax24h":
+                 	{
+                 			"value":"0",
+                 			"typ":"var"
+                 	},
+                 "tempMin24h":
+                 	{
+                 			"value":"-100",
+                 			"typ":"var"
+                 	},
+                 "lasttemp":
+                 	{
+                 			"value":{},
+                 			"typ":"array",
+                 			"hidden":true
+                 	}
+             
+}}
+
